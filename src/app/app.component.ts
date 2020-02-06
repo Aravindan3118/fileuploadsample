@@ -7,22 +7,25 @@ import {HttpClientModule, HttpClient, HttpRequest, HttpResponse, HttpEventType} 
 })
 export class AppComponent {
   title = 'fileUpload';
+  myImage = null
   constructor(private http: HttpClient){
     
   }
-  upload(files: File[]){
+  upload(files){
     //pick from one of the 4 styles of file uploads below
     this.uploadAndProgress(files);
   }
 
-  uploadAndProgress(files: File[]){
+  uploadAndProgress(files){
     console.log(files)
     var formData = new FormData();
-    Array.from(files).forEach(f => formData.append('file[]',f))
+    formData.append('file',files[0])
+    // Array.from(files).forEach(f => formData.append('file[]',f))
     
-    this.http.post('http://localhost:3000', formData)
+    this.http.post('http://172.16.6.154:8081/user/uploadProfile', formData)
       .subscribe(res => {
         console.log('res',res)
+        this.myImage = res['url']
     });
   }
 }
